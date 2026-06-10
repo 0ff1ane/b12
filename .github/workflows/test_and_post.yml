@@ -1,0 +1,34 @@
+name: Run tests and post
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: default
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          NAME: ${{ vars.NAME }}
+          EMAIL: ${{ vars.EMAIL }}
+          RESUME_URL: ${{ vars.RESUME_URL }}
+        run: >
+          docker build -t b12
+          --build-arg SIGNING_KEY --build-arg NAME
+          --build-arg EMAIL --build-arg RESUME_URL .
+
+      - name: Run tests
+        run: docker run --rm b12 uv run pytest
+
+      - name: Run POST script
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          EMAIL: ${{ vars.EMAIL }}
+          NAME: ${{ vars.NAME }}
+          RESUME_URL: ${{ vars.RESUME_URL }}
+        run: python3 .github/workflows/script.py

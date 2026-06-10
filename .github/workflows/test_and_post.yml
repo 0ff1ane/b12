@@ -1,7 +1,6 @@
 name: Run tests and post
 
 on:
-  push:
   pull_request:
 
 jobs:

@@ -14,6 +14,7 @@ jobs:
       - name: Build image
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          API_URL: ${{ vars.API_URL }}
           NAME: ${{ vars.NAME }}
           EMAIL: ${{ vars.EMAIL }}
           RESUME_URL: ${{ vars.RESUME_URL }}
@@ -28,7 +29,8 @@ jobs:
       - name: Run POST script
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          EMAIL: ${{ vars.EMAIL }}
+          API_URL: ${{ vars.API_URL }}
           NAME: ${{ vars.NAME }}
+          EMAIL: ${{ vars.EMAIL }}
           RESUME_URL: ${{ vars.RESUME_URL }}
         run: python3 .github/workflows/script.py
